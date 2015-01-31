@@ -1,0 +1,7 @@
+name: CLI Compiler
+description: "Support: Nhat Tran <nhat.tran@inspire.vn>"
+version: '@version'
+build: '@build'
+token:
+commands:
+  - in2pire.compiler.cli.command.compile

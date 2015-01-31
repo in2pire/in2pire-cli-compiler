@@ -1,0 +1,53 @@
+description: Compile Application
+arguments:
+  app:
+    name: app
+    mode: 1
+    description: 'Path to executable application. Eg: bin/app'
+options:
+  project-path:
+    name: project-path
+    mode: 4
+    default:
+    description: 'Path to project directory'
+  config-path:
+    name: config-path
+    mode: 4
+    default:
+    description: 'Path to configuration directory'
+  build-version:
+    name: build-version
+    mode: 4
+    default:
+    description: 'Build Version'
+  build-date:
+    name: build-date
+    mode: 4
+    default:
+    description: 'Build Date'
+  compress:
+    name: compress
+    mode: 4
+    default: 1
+    description: 'Compress files'
+  optimize:
+    name: optimize
+    mode: 4
+    default: 1
+    description: 'Optimize class map'
+  phar:
+    name: phar
+    mode: 4
+    default: 0
+    description: 'Add .phar extension'
+  executable:
+    name: executable
+    mode: 4
+    default: 1
+    description: 'Create executable file'
+questions:
+validators:
+  - in2pire.compiler.cli.validator.project-path
+  - in2pire.compiler.cli.validator.app
+tasks:
+  - in2pire.compiler.cli.task.compile

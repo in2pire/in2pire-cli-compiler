@@ -1,0 +1,45 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * CLI Compiler Application.
+ *
+ * @package In2pire
+ * @subpackage CliCompiler
+ * @author Nhat Tran <nhat.tran@inspire.vn>
+ */
+
+define('APP_NAME', 'compiler');
+define('APP_PATH', __DIR__);
+define('APP_CONF_PATH', APP_PATH . '/../config/' . APP_NAME);
+define('REQUEST_TIME', (int) $_SERVER['REQUEST_TIME']);
+
+if (PHP_SAPI !== 'cli') {
+    echo 'Warning: ' . APP_NAME . ' should be invoked via the CLI version of PHP, not the ' . PHP_SAPI . ' SAPI' . PHP_EOL;
+    exit(1);
+}
+
+// Set PHP variables.
+error_reporting(-1);
+
+if (function_exists('ini_set')) {
+    // Display errors.
+    ini_set('display_errors', 1);
+
+    // If we have pinba, disable it.
+    if (extension_loaded('pinba')) {
+        ini_set('pinba.enabled', false);
+    }
+
+    // If we have newrelic, disable it.
+    if (extension_loaded('newrelic')) {
+        ini_set('newrelic.enabled', false);
+    }
+}
+
+// Add class loader.
+require APP_PATH . '/../vendor/autoload.php';
+
+// Run application.
+$app = new In2pire\Cli\CliApplication();
+$app->run();

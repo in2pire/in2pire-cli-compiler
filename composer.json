@@ -1,0 +1,36 @@
+{
+    "name": "in2pire/cli-compiler",
+    "type": "project",
+    "description": "IN2PIRE CLI Compiler",
+    "license": "MIT",
+    "keywords": ["in2pire", "inspire", "cli", "console", "compiler"],
+    "authors": [
+        {
+            "name": "Nhat Tran",
+            "email": "nhat.tran@inspire.vn",
+            "homepage": "http://inspire.vn",
+            "role": "Founder"
+        }
+    ],
+    "support": {
+        "email": "nhat.tran@inspire.vn"
+    },
+    "require": {
+        "php": ">=5.4",
+        "seld/jsonlint": "@stable",
+        "symfony/process": "@stable",
+        "symfony/finder": "@stable",
+        "in2pire/cli": "@stable",
+        "in2pire/utility": "@stable"
+    },
+    "autoload": {
+        "psr-4": {
+            "In2pire\\Compiler\\": "src/In2pire/Compiler/"
+        }
+    },
+    "config": {
+        "bin-dir": "bin/",
+        "vendor-dir": "vendor/",
+        "autoloader-suffix": "In2pireCliCompiler"
+    }
+}
