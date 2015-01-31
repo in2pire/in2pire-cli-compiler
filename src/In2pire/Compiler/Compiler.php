@@ -509,7 +509,7 @@ class Compiler
                 break;
 
             case (pathinfo($file, PATHINFO_EXTENSION) == 'yml'):
-                $content = str_replace(['@version', '@build'], [$this->buildDate, $this->buildVersion], $content);
+                $content = str_replace(['@version', '@build'], [$this->buildVersion, $this->buildDate], $content);
                 break;
         }
 
