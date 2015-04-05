@@ -25,6 +25,12 @@ options:
     mode: 4
     default:
     description: 'Build Date'
+  exclude-file:
+    name: exclude-file
+    # Mode: Optional array.
+    mode: 12
+    default:
+    description: 'Exclude files'
   compress:
     name: compress
     mode: 4

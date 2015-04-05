@@ -37,6 +37,7 @@ class Compile extends \In2pire\Cli\Task\CliTask
         $configPath = $input->getOption('config-path');
         $buildVersion = $input->getOption('build-version');
         $buildDate = $input->getOption('build-date');
+        $excludeFiles = $input->getOption('exclude-file');
         $compileFlag = 0;
 
         // Flags
@@ -64,6 +65,7 @@ class Compile extends \In2pire\Cli\Task\CliTask
 
         $compiler = new Compiler($projectPath, $appPath, $appName, $configPath, $buildVersion, $buildDate);
         $compiler
+            ->excludeFiles($excludeFiles)
             ->setFlag($compileFlag)
             ->setLogger($logger)
             ->run();

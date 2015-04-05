@@ -1,0 +1,4 @@
+HOW TO COMPILE
+===
+
+Run ./bin/compiler compile --build-version=vX.Y.Z --exclude-file=hiddeninput.exe

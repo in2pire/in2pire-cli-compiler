@@ -122,6 +122,13 @@ class Compiler
     protected $builtFile = null;
 
     /**
+     * List of excluded files.
+     *
+     * @var array
+     */
+    protected $excludeFiles = [];
+
+    /**
      * Constructor.
      *
      * @param string $projectPath
@@ -483,6 +490,21 @@ class Compiler
     }
 
     /**
+     * Exclude files.
+     *
+     * @param array $excludeFiles
+     *   List of files.
+     *
+     * @return \In2pire\Compiler\Compiler
+     *   The called object.
+     */
+    public function excludeFiles(array $excludeFiles)
+    {
+        $this->excludeFiles = $excludeFiles;
+        return $this;
+    }
+
+    /**
      * Add file to phar package.
      *
      * @param \Phar $phar
@@ -533,6 +555,35 @@ class Compiler
         $content = preg_replace('{^#!/usr/bin/env php\s*}', '', $content);
 
         $phar->addFromString($relativeBinFile, $content);
+    }
+
+    /**
+     * Get finder.
+     *
+     * @return \Symfony\Component\Finder\Finder
+     *   Finder.
+     */
+    protected function findFiles()
+    {
+        // Add php files.
+        $finder = new Finder();
+        $finder
+            ->files()
+            // Ignore version control system folder.
+            ->ignoreVCS(true)
+            // Do not add tests folders.
+            ->exclude('Tests')
+            ->exclude('tests')
+            // Do not add composer backup folder.
+            ->exclude('composer.bak');
+
+        if (!empty($this->excludeFiles)) {
+            foreach ($this->excludeFiles as $file) {
+                $finder->notPath($file);
+            }
+        }
+
+        return $finder;
     }
 
     /**
@@ -624,54 +675,33 @@ EOF;
         $phar->startBuffering();
 
         // Add php files.
-        $finder = new Finder();
-        $finder->files()
-            // Ignore version control system folder.
-            ->ignoreVCS(true)
+        $files = $this->findFiles()
             // Only add php file.
             ->name('*.php')
-            // Do not add tests folders.
-            ->exclude('Tests')
-            ->exclude('tests')
-            // Do not add composer backup folder.
-            ->exclude('composer.bak')
             // Search in project folder.
             ->in($this->projectPath);
 
-        foreach ($finder as $file) {
+        foreach ($files as $file) {
             $this->addFile($phar, $file);
         }
 
         // Add resource files
-        $finder = new Finder();
-        $finder->files()
-            // Ignore version control system folder.
-            ->ignoreVCS(true)
-            // Do not add tests folders.
-            ->exclude('Tests')
-            ->exclude('tests')
+        $files = $this->findFiles()
             // Only add files in /Resources/
             ->path('/Resources/')
-            ->files()
             ->in($this->projectPath);
 
-        foreach ($finder as $file) {
+        foreach ($files as $file) {
             $this->addFile($phar, $file, false);
         }
 
         // Add config files.
-        $finder = new Finder();
-        $finder->files()
-            // Ignore version control system folder.
-            ->ignoreVCS(true)
-            // Do not add tests folders.
-            ->exclude('Tests')
-            ->exclude('tests')
+        $files = $this->findFiles()
             // Only add yml file.
             ->name('*.yml')
             ->in($this->configPath);
 
-        foreach ($finder as $file) {
+        foreach ($files as $file) {
             $this->addFile($phar, $file, false);
         }
 
