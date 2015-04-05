@@ -642,10 +642,32 @@ EOF;
             $this->addFile($phar, $file);
         }
 
+        // Add resource files
+        $finder = new Finder();
+        $finder->files()
+            // Ignore version control system folder.
+            ->ignoreVCS(true)
+            // Do not add tests folders.
+            ->exclude('Tests')
+            ->exclude('tests')
+            // Only add files in /Resources/
+            ->path('/Resources/')
+            ->files()
+            ->in($this->projectPath);
+
+        foreach ($finder as $file) {
+            $this->addFile($phar, $file, false);
+        }
+
         // Add config files.
         $finder = new Finder();
         $finder->files()
+            // Ignore version control system folder.
             ->ignoreVCS(true)
+            // Do not add tests folders.
+            ->exclude('Tests')
+            ->exclude('tests')
+            // Only add yml file.
             ->name('*.yml')
             ->in($this->configPath);
 
