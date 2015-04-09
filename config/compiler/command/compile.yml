@@ -31,26 +31,27 @@ options:
     mode: 12
     default:
     description: 'Exclude files'
-  compress:
-    name: compress
-    mode: 4
-    default: 1
-    description: 'Compress files'
-  optimize:
-    name: optimize
-    mode: 4
-    default: 1
-    description: 'Optimize class map'
+  no-compress:
+    name: no-compress
+    mode: 16
+    description: 'Do not compress files'
+  no-optimize:
+    name: no-optimize
+    mode: 16
+    description: 'Do not optimize class map'
+  no-executable:
+    name: no-executable
+    mode: 16
+    description: 'Do not create executable file'
+  no-hidden-input:
+    name: no-hidden-input
+    # Mode: Optional flag
+    mode: 16
+    description: "Exclude symfony console's hiddeninput.exe from compiled package"
   phar:
     name: phar
-    mode: 4
-    default: 0
+    mode: 16
     description: 'Add .phar extension'
-  executable:
-    name: executable
-    mode: 4
-    default: 1
-    description: 'Create executable file'
 questions:
 validators:
   - in2pire.compiler.cli.validator.project-path

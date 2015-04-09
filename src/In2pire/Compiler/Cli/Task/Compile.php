@@ -41,20 +41,24 @@ class Compile extends \In2pire\Cli\Task\CliTask
         $compileFlag = 0;
 
         // Flags
-        if ($input->getOption('compress')) {
+        if (!$input->hasFlag('no-compress')) {
             $compileFlag |= Compiler::FLAG_COMPRESS;
         }
 
-        if ($input->getOption('optimize')) {
+        if (!$input->hasFlag('no-optimize')) {
             $compileFlag |= Compiler::FLAG_OPTIMIZE;
         }
 
-        if ($input->getOption('phar')) {
+        if (!$input->hasFlag('no-executable')) {
+            $compileFlag |= Compiler::FLAG_EXECUTABLE;
+        }
+
+        if ($input->hasFlag('phar')) {
             $compileFlag |= Compiler::FLAG_PHAR;
         }
 
-        if ($input->getOption('executable')) {
-            $compileFlag |= Compiler::FLAG_EXECUTABLE;
+        if ($input->hasFlag('no-hidden-input')) {
+            $excludeFiles[] = '/Symfony/Component/Console/Resources/bin/hiddeninput.exe';
         }
 
         if ($output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL) {
