@@ -804,7 +804,7 @@ EOF;
             $this->returnCode = $this->compile();
         } catch(\Exception $e) {
             $this->lastError = get_class($e) . ': ' . $e->getMessage();
-            $this->returnCode = RETURN_ERROR;
+            $this->returnCode = static::RETURN_ERROR;
         }
 
         if (!$this->restoreComposer()) {
