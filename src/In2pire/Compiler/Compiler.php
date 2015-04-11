@@ -824,6 +824,9 @@ EOF;
             }
 
             $this->returnCode = $this->compile();
+
+            gc_collect_cycles();
+            sleep(1);
         } catch(\Exception $e) {
             $this->lastError = get_class($e) . ': ' . $e->getMessage();
             $this->returnCode = static::RETURN_ERROR;
