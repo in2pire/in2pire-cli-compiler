@@ -129,6 +129,13 @@ class Compiler
     protected $excludeFiles = [];
 
     /**
+     * File counter.
+     *
+     * @var int
+     */
+    protected $fileCounter = 0;
+
+    /**
      * Constructor.
      *
      * @param string $projectPath
@@ -374,6 +381,65 @@ class Compiler
     }
 
     /**
+     * Get max open files limit.
+     *
+     * @return int|boolean
+     *   Number of max open files or false.
+     */
+    public function getMaxOpenFilesLimit()
+    {
+        static $limit = null;
+
+        if (null === $limit) {
+            $process = new Process('ulimit -n');
+            $process->run();
+
+            if ($process->isSuccessful()) {
+                $limit = (int) trim($process->getOutput());
+            }
+
+            unset($process);
+        }
+
+        return $limit;
+    }
+
+    /**
+     * Reset file counter.
+     *
+     * @return \In2pire\Compiler\Compiler
+     *   The called object.
+     */
+    protected function resetFileCounter()
+    {
+        $this->fileCounter = 0;
+        return $this;
+    }
+
+    /**
+     * Increase file counter.
+     *
+     * @return \In2pire\Compiler\Compiler
+     *   The called object.
+     */
+    protected function increaseFileCounter()
+    {
+        $this->fileCounter++;
+        return $this;
+    }
+
+    /**
+     * Get file counter.
+     *
+     * @return int
+     *   Counter.
+     */
+    protected function getFileCounter()
+    {
+        return $this->fileCounter;
+    }
+
+    /**
      * Backup vendor/composer.
      */
     protected function backupComposer()
@@ -552,6 +618,7 @@ class Compiler
         }
 
         $phar->addFromString($path, $content);
+        $this->increaseFileCounter();
     }
 
     /**
@@ -571,6 +638,7 @@ class Compiler
         $content = preg_replace('{^#!/usr/bin/env php\s*}', '', $content);
 
         $phar->addFromString($relativeBinFile, $content);
+        $this->increaseFileCounter();
     }
 
     /**
@@ -689,6 +757,7 @@ EOF;
 
         $phar->setSignatureAlgorithm(\Phar::SHA1);
         $phar->startBuffering();
+        $this->resetFileCounter();
 
         // Add php files.
         $files = $this->findFiles()
@@ -732,7 +801,11 @@ EOF;
 
         // Try to compress files.
         if ($this->flag & static::FLAG_COMPRESS) {
-            if (extension_loaded('zlib') || extension_loaded('bzip2')) {
+            if ($this->getFileCounter() > $this->getMaxOpenFilesLimit()) {
+                $this->lastError = 'Could not compress ' . $this->getFileCounter() . ' files, max open files is ' . $this->getMaxOpenFilesLimit() . PHP_EOL .
+                    'Please use --no-compress or increase the limit using `ulimit -n NUMBER` (NUMBER > ' . $this->getFileCounter() . ')';
+                return static::RETURN_ERROR;
+            } elseif (extension_loaded('zlib') || extension_loaded('bzip2')) {
                 $this->logger->log('<info>Compressed files</info>');
                 $phar->compressFiles(\Phar::GZ);
             } else {
@@ -824,9 +897,6 @@ EOF;
             }
 
             $this->returnCode = $this->compile();
-
-            gc_collect_cycles();
-            sleep(1);
         } catch(\Exception $e) {
             $this->lastError = get_class($e) . ': ' . $e->getMessage();
             $this->returnCode = static::RETURN_ERROR;
