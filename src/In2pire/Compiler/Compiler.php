@@ -385,8 +385,11 @@ class Compiler
         if (is_dir($composerBak)) {
             $process = new Process('rm -rf "' . $composerBak . '"');
             $process->run();
+            $isSuccessful = $process->isSuccessful();
 
-            if (!$process->isSuccessful()) {
+            unset($process);
+
+            if (!$isSuccessful) {
                 return false;
             }
         }
@@ -394,8 +397,11 @@ class Compiler
         // Backup
         $process = new Process('cp -R "' . $composerDir . '" "' . $composerBak . '"');
         $process->run();
+        $isSuccessful = $process->isSuccessful();
 
-        return $process->isSuccessful();
+        unset($process);
+
+        return $isSuccessful;
     }
 
     /**
@@ -414,16 +420,22 @@ class Compiler
         // Remove current one.
         $process = new Process('rm -rf "' . $composerDir . '"');
         $process->run();
+        $isSuccessful = $process->isSuccessful();
 
-        if (!$process->isSuccessful()) {
+        unset($process);
+
+        if (!$isSuccessful) {
             return false;
         }
 
         // Restore
         $process = new Process('mv "' . $composerBak . '" "' . $composerDir . '"');
         $process->run();
+        $isSuccessful = $process->isSuccessful();
 
-        return $process->isSuccessful();
+        unset($process);
+
+        return $isSuccessful;
     }
 
     /**
@@ -457,8 +469,11 @@ class Compiler
         // Detect global composer command.
         $process = new Process('hash composer');
         $process->run();
+        $isSuccessful = $process->isSuccessful();
 
-        if ($process->isSuccessful()) {
+        unset($process);
+
+        if ($isSuccessful) {
             return $command = 'composer';
         }
 
@@ -485,6 +500,7 @@ class Compiler
         }
 
         $this->logger->log('<info>Optimized class map</info>');
+        unset($process);
 
         return true;
     }
@@ -736,8 +752,11 @@ EOF;
         if ($this->flag & STATIC::FLAG_EXECUTABLE) {
             $process = new Process('chmod +x "' . $pharFile . '"');
             $process->run();
+            $isSuccessful = $process->isSuccessful();
 
-            if (!$process->isSuccessful()) {
+            unset($process);
+
+            if (!$isSuccessful) {
                 $this->lastError = 'An error occured while chmod phar file';
                 return static::RETURN_ERROR;
             }
@@ -757,8 +776,11 @@ EOF;
 
             $process = new Process('mv "' . $pharFile . '" "' . $noPharFile . '"');
             $process->run();
+            $isSuccessful = $process->isSuccessful();
 
-            if (!$process->isSuccessful()) {
+            unset($process);
+
+            if (!$isSuccessful) {
                 $this->lastError = 'Could not remove .phar extension';
                 return static::RETURN_ERROR;
             }
