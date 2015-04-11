@@ -76,11 +76,10 @@ class Compile extends \In2pire\Cli\Task\CliTask
 
         if ($compiler->isSuccessful()) {
             $output->writeln('<comment>Built file</comment> ' . $compiler->getBuiltFile());
-        } else {
-            $output->writeln('<error>' . $compiler->getLastError() . '</error>');
-            return static::RETURN_ERROR;
+            return static::RETURN_SUCCESS;
         }
 
-        return static::RETURN_SUCCESS;
+        $output->getErrorOutput()->writeln('<error>' . $compiler->getLastError() . '</error>');
+        return static::RETURN_ERROR;
     }
 }
