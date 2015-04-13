@@ -803,7 +803,8 @@ EOF;
         if ($this->flag & static::FLAG_COMPRESS) {
             if ($this->getFileCounter() > $this->getMaxOpenFilesLimit()) {
                 $this->lastError = 'Could not compress ' . $this->getFileCounter() . ' files, max open files is ' . $this->getMaxOpenFilesLimit() . PHP_EOL .
-                    'Please use --no-compress or increase the limit using `ulimit -n NUMBER` (NUMBER > ' . $this->getFileCounter() . ')';
+                    'Please use --no-compress or increase the limit using `ulimit -n NUMBER` (NUMBER > ' . $this->getFileCounter() . ')' . PHP_EOL .
+                    'If you are using Mac OSX, try http://superuser.com/a/514049';
                 return static::RETURN_ERROR;
             } elseif (extension_loaded('zlib') || extension_loaded('bzip2')) {
                 $this->logger->log('<info>Compressed files</info>');
