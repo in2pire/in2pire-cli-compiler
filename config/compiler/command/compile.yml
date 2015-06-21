@@ -7,21 +7,25 @@ arguments:
 options:
   project-path:
     name: project-path
+    shortcut: p
     mode: 4
     default:
     description: 'Path to project directory'
   config-path:
     name: config-path
+    shortcut: c
     mode: 4
     default:
     description: 'Path to configuration directory'
   build-version:
     name: build-version
+    shortcut: b
     mode: 4
     default:
     description: 'Build Version'
   build-date:
     name: build-date
+    shortcut: d
     mode: 4
     default:
     description: 'Build Date'

@@ -18,9 +18,9 @@
     "require": {
         "php": ">=5.4",
         "seld/jsonlint": "@stable",
-        "symfony/process": ">=2.6.0",
-        "symfony/finder": ">=2.6.0",
-        "in2pire/cli": ">=1.5.1",
+        "symfony/process": "2.7.x",
+        "symfony/finder": "2.7.x",
+        "in2pire/cli": ">=1.7.0",
         "in2pire/utility": "@stable"
     },
     "autoload": {
