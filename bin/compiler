@@ -12,7 +12,6 @@
 define('APP_NAME', 'compiler');
 define('APP_PATH', __DIR__);
 define('APP_CONF_PATH', APP_PATH . '/../config/' . APP_NAME);
-define('REQUEST_TIME', (int) $_SERVER['REQUEST_TIME']);
 
 if (PHP_SAPI !== 'cli') {
     echo 'Warning: ' . APP_NAME . ' should be invoked via the CLI version of PHP, not the ' . PHP_SAPI . ' SAPI' . PHP_EOL;
@@ -40,6 +39,12 @@ if (function_exists('ini_set')) {
 // Add class loader.
 require APP_PATH . '/../vendor/autoload.php';
 
+// Init configuration
+$config = In2pire\Cli\Configuration::getInstance();
+$config->init(APP_CONF_PATH);
+
 // Run application.
 $app = new In2pire\Cli\CliApplication();
-$app->run();
+$code = $app->run();
+
+exit($code);

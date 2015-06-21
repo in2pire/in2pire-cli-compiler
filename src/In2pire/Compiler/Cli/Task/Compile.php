@@ -53,12 +53,16 @@ class Compile extends \In2pire\Cli\Task\CliTask
             $compileFlag |= Compiler::FLAG_EXECUTABLE;
         }
 
+        if (!$input->hasFlag('no-cache')) {
+            $compileFlag |= Compiler::FLAG_CACHE;
+        }
+
         if ($input->hasFlag('phar')) {
             $compileFlag |= Compiler::FLAG_PHAR;
         }
 
         if ($input->hasFlag('no-hidden-input')) {
-            $excludeFiles[] = '/Symfony/Component/Console/Resources/bin/hiddeninput.exe';
+            $excludeFiles[] = '/symfony/console/Resources/bin/hiddeninput.exe';
         }
 
         if ($output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL) {

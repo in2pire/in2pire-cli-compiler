@@ -51,7 +51,12 @@ options:
     name: no-hidden-input
     # Mode: Optional flag
     mode: 16
-    description: "Exclude symfony console's hiddeninput.exe from compiled package"
+    description: "Exclude symfony console's hiddeninput.exe"
+  no-cache:
+    name: no-cache
+    # Mode: Optional flag
+    mode: 16
+    description: "Do not cache configuration to file"
   phar:
     name: phar
     mode: 16

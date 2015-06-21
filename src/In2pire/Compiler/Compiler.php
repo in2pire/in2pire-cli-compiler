@@ -12,6 +12,7 @@ namespace In2pire\Compiler;
 
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Process;
+use In2pire\Cli\Configuration;
 use In2pire\Compiler\Logger\LoggerInterface;
 use In2pire\Compiler\Logger\VoidLogger;
 use In2pire\Compiler\Component\Composer;
@@ -40,6 +41,11 @@ class Compiler
      * Make executable file.
      */
     const FLAG_EXECUTABLE = 8;
+
+    /**
+     * Cache configuration.
+     */
+    const FLAG_CACHE = 16;
 
     /**
      * Success code.
@@ -604,16 +610,24 @@ class Compiler
         $this->logger->log('<comment>Adding file</comment> ' . $path);
 
         switch (true) {
-            case $strip:
-                $content = $this->stripWhitespace($content);
-                break;
-
             case ('LICENSE' === basename($file)):
                 $content = "\n" . $content . "\n";
                 break;
 
+            case preg_match('#/In2pire/Cli/Configuration/PhpConfiguration.php$#', $path):
+                if ($this->flag & STATIC::FLAG_CACHE) {
+                    $configuration = $this->getAllConfiguration();
+                    $content = str_replace('// [CONFIGURATION]', '$this->configuration = ' . var_export($configuration, 1) . ';', $content);
+                    $content = str_replace(['@version', '@build'], [$this->buildVersion, $this->buildDate], $content);
+                }
+                break;
+
             case (pathinfo($file, PATHINFO_EXTENSION) == 'yml'):
                 $content = str_replace(['@version', '@build'], [$this->buildVersion, $this->buildDate], $content);
+                break;
+
+            case $strip:
+                $content = $this->stripWhitespace($content);
                 break;
         }
 
@@ -734,6 +748,27 @@ __HALT_COMPILER();
 EOF;
     }
 
+    protected function getAllConfiguration()
+    {
+        $rootPath = $this->projectPath . '/' . $this->configPath;
+        $files = $this->findFiles()
+            // Only add yml file.
+            ->name('*.yml')
+            ->in($rootPath);
+
+        $results = [];
+        $config = new Configuration();
+        $config->init($rootPath, false);
+
+        foreach ($files as $file) {
+            $path = strtr(str_replace($rootPath . '/', '', $file->getRealPath()), '\\', '/');
+            $namespace = str_replace(['.yml', '/'], ['', '.'], $path);
+            $results[$namespace] = $config->getAll($namespace);
+        }
+
+        return $results;
+    }
+
     /**
      * Compile application.
      */
@@ -781,13 +816,15 @@ EOF;
         }
 
         // Add config files.
-        $files = $this->findFiles()
-            // Only add yml file.
-            ->name('*.yml')
-            ->in($this->configPath);
+        if (~$this->flag & STATIC::FLAG_CACHE) {
+            $files = $this->findFiles()
+                // Only add yml file.
+                ->name('*.yml')
+                ->in($this->configPath);
 
-        foreach ($files as $file) {
-            $this->addFile($phar, $file, false);
+            foreach ($files as $file) {
+                $this->addFile($phar, $file, false);
+            }
         }
 
         // Add the cli application.

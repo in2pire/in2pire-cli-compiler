@@ -4,21 +4,21 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e36cd4c20795041e55bdf384c7a4055f",
+    "hash": "f68b8a04643b1cd0b7d10f3ab9a54821",
     "packages": [
         {
             "name": "in2pire/cli",
-            "version": "1.7.0",
+            "version": "1.8.0",
             "target-dir": "In2pire/Cli",
             "source": {
                 "type": "git",
                 "url": "https://github.com/in2pire/in2pire-cli.git",
-                "reference": "65c5589f5c191b8d2cee79fb42717f3eb1e898fa"
+                "reference": "084c3b93f6ca37f183fb27211d3047229f843d66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/in2pire/in2pire-cli/zipball/65c5589f5c191b8d2cee79fb42717f3eb1e898fa",
-                "reference": "65c5589f5c191b8d2cee79fb42717f3eb1e898fa",
+                "url": "https://api.github.com/repos/in2pire/in2pire-cli/zipball/084c3b93f6ca37f183fb27211d3047229f843d66",
+                "reference": "084c3b93f6ca37f183fb27211d3047229f843d66",
                 "shasum": ""
             },
             "require": {
@@ -55,7 +55,7 @@
                 "in2pire",
                 "inspire"
             ],
-            "time": "2015-06-21 03:45:40"
+            "time": "2015-06-21 09:09:54"
         },
         {
             "name": "in2pire/utility",
