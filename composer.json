@@ -20,8 +20,8 @@
         "seld/jsonlint": "@stable",
         "symfony/process": "2.7.x",
         "symfony/finder": "2.7.x",
-        "in2pire/cli": ">=1.8.0",
-        "in2pire/utility": ">=1.0.0"
+        "in2pire/cli": ">=1.9.0",
+        "in2pire/utility": ">=1.0.3"
     },
     "autoload": {
         "psr-4": {
