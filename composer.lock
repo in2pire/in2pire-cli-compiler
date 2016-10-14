@@ -14,12 +14,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/in2pire/in2pire-cli.git",
-                "reference": "26d2d2cf440931f564d3c8ced9ab3a8357f4381f"
+                "reference": "7b3b55a16df299c31dd78031fc2a2699676715bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/in2pire/in2pire-cli/zipball/26d2d2cf440931f564d3c8ced9ab3a8357f4381f",
-                "reference": "26d2d2cf440931f564d3c8ced9ab3a8357f4381f",
+                "url": "https://api.github.com/repos/in2pire/in2pire-cli/zipball/7b3b55a16df299c31dd78031fc2a2699676715bd",
+                "reference": "7b3b55a16df299c31dd78031fc2a2699676715bd",
                 "shasum": ""
             },
             "require": {
